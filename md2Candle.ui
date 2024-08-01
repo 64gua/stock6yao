@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1221</width>
+    <height>774</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTextEdit" name="txtContent">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>26</y>
+      <width>611</width>
+      <height>281</height>
+     </rect>
+    </property>
+    <property name="sizeIncrement">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+      <pointsize>8</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_pic">
+    <property name="geometry">
+     <rect>
+      <x>498</x>
+      <y>340</y>
+      <width>601</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>taiji.ico</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>1112</x>
+      <y>130</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>股票名字</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_draw">
+    <property name="geometry">
+     <rect>
+      <x>1100</x>
+      <y>340</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>日K线图</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>kline.jpg</normaloff>kline.jpg</iconset>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtStockName">
+    <property name="geometry">
+     <rect>
+      <x>1112</x>
+      <y>150</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>0</y>
+      <width>54</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>文件夹</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtGuaName">
+    <property name="geometry">
+     <rect>
+      <x>1112</x>
+      <y>30</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtGuaDate">
+    <property name="geometry">
+     <rect>
+      <x>1112</x>
+      <y>190</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>1112</x>
+      <y>170</y>
+      <width>41</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>日  期</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>1112</x>
+      <y>10</y>
+      <width>54</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>卦  名</string>
+    </property>
+   </widget>
+   <widget class="QTreeView" name="tree_view">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>471</width>
+      <height>761</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>1112</x>
+      <y>90</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>股票代号</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtStockCode">
+    <property name="geometry">
+     <rect>
+      <x>1112</x>
+      <y>110</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_save">
+    <property name="geometry">
+     <rect>
+      <x>1020</x>
+      <y>50</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>更新正文</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../Qt/qtcreator-2.5.2/savebutton.png</normaloff>../../Qt/qtcreator-2.5.2/savebutton.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_draw2">
+    <property name="geometry">
+     <rect>
+      <x>1100</x>
+      <y>370</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>月K线图</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>kline.jpg</normaloff>kline.jpg</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_save_img">
+    <property name="geometry">
+     <rect>
+      <x>970</x>
+      <y>310</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>存盘并链接正文</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtImg">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>310</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>314</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>当前图片</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_paipan">
+    <property name="geometry">
+     <rect>
+      <x>1112</x>
+      <y>60</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>重新排盘</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>310</y>
+      <width>351</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_subject">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>0</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>提取主题</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtSubject">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>0</y>
+      <width>321</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>0</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>主题</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_ocr">
+    <property name="geometry">
+     <rect>
+      <x>1110</x>
+      <y>230</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>百度OCR</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_insert_filename">
+    <property name="geometry">
+     <rect>
+      <x>1020</x>
+      <y>26</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>插入文件名</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1221</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>文件编辑</string>
+    </property>
+    <addaction name="actMove"/>
+    <addaction name="actRename"/>
+    <addaction name="actSaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="actDelete"/>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <action name="actionName">
+   <property name="text">
+    <string>Name</string>
+   </property>
+  </action>
+  <action name="actionDate">
+   <property name="text">
+    <string>Date</string>
+   </property>
+  </action>
+  <action name="actRename">
+   <property name="text">
+    <string>Rename 文件改名</string>
+   </property>
+  </action>
+  <action name="actSaveAs">
+   <property name="text">
+    <string>Save as 另存</string>
+   </property>
+  </action>
+  <action name="actMove">
+   <property name="text">
+    <string>Move 同名移动</string>
+   </property>
+  </action>
+  <action name="actDelete">
+   <property name="text">
+    <string>删除垃圾冗余文件</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

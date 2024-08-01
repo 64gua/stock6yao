@@ -1,0 +1,53 @@
+#2024-7-11 将youdaoPDF/pdf_csv中的文件全部插入数据库   
+1.程序为： insertCSVtoDB.py  
+处理数据为：part1_treated_v1_different.csv   --  part2,part3,part4,part5
+    主力函数 insertNewCsvToDatabase(newcsv)
+   （其中different文件为删除  c:\youdaoPDF\418down\易经测市\测股卦例   2658 个文件重复的，缩小瘦身的文件。）
+原2658个文件已经全部转换成markdown文件存为“测股卦例3”  --》c:\youdaoMD\测股卦例v3
+这部分文件还需要补齐图片，再注入数据库。
+# 晋静卦没有伏神
+
+2. 静卦没有伏神问题已经解决
+3. 2014-07-19 测股卦例v3 文件预先处理完毕，准备提取gua,stock,stockname,date, subject 信息进入csv文件
+主要功能在 MarkdownToCSV.py
+
+2014-07-21
+1. 测股卦例v3 文件预先处理完毕，成果为gua_code_day_subject_file_img.csv  插入数据库
+此批数据统一Dir=c:/youdaoMD/测股卦例v3 , 方便识别
+
+2. BBS 目录为数据库内容部分转化为markdown文将
+2024甲辰年目录 应该全部进入数据库  ，有mdfile_insert_to_database.py 直接输入数据库。
+
+3. CURRENT_DIR="C:/youdaoMD/A年卦月卦周卦/2014甲午年/" 提取信息  csv1="gua_code_day_subject_file_img1.csv
+并完成数据库插入
+
+4. C:/youdaoMD/A年卦月卦周卦/2015乙未年/  完成提取CSV与插入数据库
+2024-07-22
+部分文件为.note 文件，正好有PDF。 将PDF转化为note开头的markdown文件。
+2016丙申年   完成提取，插入数据库
+CURRENT_DIR="C:/youdaoMD/A年卦月卦周卦/2017丁酉年/"  完成提取并插入数据库
+
+2024-07-23
+CURRENT_DIR="C:/youdaoMD/A年卦月卦周卦/2018戊戌年/"  完成提取并插入数据库
+#CURRENT_DIR="C:/youdaoMD/A年卦月卦周卦/2019己亥年/"  完成提取CSV与插入数据库
+
+2024-07-24
+CURRENT_DIR="C:/youdaoMD/A年卦月卦周卦/2020庚子年/" 完成提取CSV与插入数据库
+CURRENT_DIR="C:/youdaoMD/A年卦月卦周卦/2021辛丑年/" 预处理D开头文件
+CURRENT_DIR="C:/youdaoMD/A年卦月卦周卦/2021辛丑年/" 完成提取CSV与插入数据库
+2024-07-25
+CURRENT_DIR="C:/youdaoMD/A年卦月卦周卦/2023癸卯年/"完成提取CSV与插入数据库
+CURRENT_DIR="C:/youdaoMD/A年卦月卦周卦/2022壬寅年是个硬骨头，只完成了K标注
+
+2024-07-26
+CURRENT_DIR="C:/youdaoMD/A年卦月卦周卦/2022壬寅年/"完成提取CSV与插入数据库
+2024-07-27  --07-28 
+CURRENT_DIR="C:/youdaoMD/易经测市/" 完成提取CSV与插入数据库
+CURRENT_DIR="C:/youdaoMD/A年卦月卦周卦/" 小股残余 完成提取CSV与插入数据库
+CURRENT_DIR="C:/youdaoMD/2024甲辰年/" 完成提取CSV与插入数据库（本来就全）
+CURRENT_DIR="C:/youdaoMD/mobilePics/" 完成提取CSV与插入数据库
+
+CURRENT_DIR="C:/youdaoMD/汇总案例/"完成提取CSV与插入数据库
+
+××××××最后还差c:/youdaoMD/tempnote目录note文件
+      及部分汇总开头的md文件散落在子文件夹中。
