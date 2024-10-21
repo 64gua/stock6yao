@@ -18,7 +18,7 @@ gua_list = ["乾","坤","屯","蒙","需","讼","师","比","小畜","履","泰"
 "节","中孚","小过","既济","未济"]
 
 def isGua(string1):  
-    if string.strip in gua_list:
+    if string1.strip in gua_list:
         return True
     else:
         return False
@@ -197,7 +197,7 @@ def drawMonthLine(secNum,dateOriginStr):
     return tempfile
 
 def findname_stock(codestr):  #csv 文件中有股票和ETF名单，包括大盘与创业板代号
-    df=pd.read_csv("data/stock_and_etf.csv",dtype={0:"string",1:"string"})
+    df=pd.read_csv("e:/stock6yao/data/stock_and_etf.csv",dtype={0:"string",1:"string"})
     stocks = df.loc[df['code'] == codestr, 'name']
     if  stocks.empty:
         name="NULL"
@@ -206,7 +206,7 @@ def findname_stock(codestr):  #csv 文件中有股票和ETF名单，包括大盘
     return name
 
 def findcode_stock(namestr):
-    df=pd.read_csv("data/stock_and_etf.csv",dtype={0:"string",1:"string"})
+    df=pd.read_csv("e:/stock6yao/data/stock_and_etf.csv",dtype={0:"string",1:"string"})
     stock_code = df.loc[df['name'].str.contains(namestr), 'code']
     if  stock_code.empty:
         code="NULL"
@@ -249,7 +249,7 @@ def extractStockName(contents):
         name=findname_stock(code)
         return code, name
 
-    stock_df=pd.read_csv("data/stock_and_etf.csv",dtype={0:"string",1:"string"})
+    stock_df=pd.read_csv("e:/stock6yao/data/stock_and_etf.csv",dtype={0:"string",1:"string"})
     for stock_name in stock_df['name']:
         stock_name1=stock_name.replace("ST","").replace("*","")
         if  contents.find(stock_name1)>-1:
@@ -270,7 +270,7 @@ def getSubject(contents):
         rightSubject=rightSubject.replace("起卦钥语","").replace("求测内容","")
         rightSubject=rightSubject.lstrip()
         if len(rightSubject)>25:  #限制长度
-            rightSubject=rightSubject[0:25]
+            rightSubject=rightSubject[0:30]
         finalsub=rightSubject.replace("\xa0","").replace("\xad","-")
         return finalsub
     subjectList2=re.findall(reSub2,contents)
@@ -301,8 +301,9 @@ def getDate(contents):
         day=re.findall(re1,contents)
         #print(day)
         if len(day)==0:
-            date=getDateFromGanzi(contents)
-            return date
+            #date=getDateFromGanzi(contents)
+            #return date
+            return "NULL"
         else:
             daystr=day[0]
         try:
@@ -423,7 +424,7 @@ def getDateFromGanzi(cont):
 if  __name__=='__main__':
     # code could be sh000001, 399006, 152919 like etf or pure stock
     file1=drawDailyLine("600028","2023-1-20")
-    dst="C:/Users/Robert/Desktop/"+file1
+    dst="C:/Users/wangy/Desktop/"+file1  
     shutil.copy(file1, dst)
     #print("desktop has a file named temp.jpg")
     #pic=candleline("002028", "20240601","20240729","20240710", period="daily" )
