@@ -7,9 +7,10 @@ from decimal import Decimal
 import sqlite3
 import sixyao
 import akshare_plotly as akPlot
-import html
+import html,html2text
+import markdown
 
-qtcreator_file  = "db_search_2_H.ui" # Enter file here.
+qtcreator_file  = "db_search.ui" # Enter file here.
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtcreator_file)
 
 class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -25,11 +26,10 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.btn_search.clicked.connect(lambda: self.loadInfo(1))
         self.btn_search_bytime.clicked.connect(lambda: self.loadInfo(0))
         self.btn_title.clicked.connect(lambda: self.loadInfo(2))
-        self.btn_draw30.clicked.connect(lambda:self.drawpicDaily(30))
-        self.btn_draw15.clicked.connect(lambda:self.drawpicDaily(15))
-        self.btn_draw_month.clicked.connect(self.drawpicMonth)
+        self.btn_draw.clicked.connect(self.drawPicture)
+
         self.tableGua.cellDoubleClicked.connect(self.displayGua)
-        self.btn_save.clicked.connect(self.saveContentChange)
+        self.btn_save.clicked.connect(self.saveAction)
         self.txtStockCode.editingFinished.connect(self.renewStockName)
         self.txtStockName.editingFinished.connect(self.renewStockCode)
         self.btn_paipan.clicked.connect(self.paipan)
@@ -42,15 +42,17 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.act_new.triggered.connect(self.refreshText)
         #self.act_del_same_pics.triggered.connect(self.deleteSamePics)
         self.act_generate_pics.triggered.connect(self.generatePics)
-        self.act_save_new.triggered.connect(self.saveNewRecord)
-        self.comboImg.currentIndexChanged.connect(self.refreshImg)
+        self.act_save_new.triggered.connect(self.insertNewRecord)
+        #self.comboImg.currentIndexChanged.connect(self.refreshImg)
         self.btn_wash.clicked.connect(self.washContent)
+        self.radioButton_html.toggled.connect(self.htmlformat)
+        self.insert_mode=False
 
     def loadInfo (self,searchmode) :
         self.mode=searchmode
         connection=sqlite3.connect('Guas.db')
         cursor=connection.cursor()
-        mainsql='select postTitle,guaDate, stockName,guaName,user,guaContent,CAST(rowid as text),imgPath, cast(markdown as text),dir from StockGuas '
+        mainsql='select postTitle,guaDate, stockName,guaName,user,guaContent,CAST(rowid as text),guaSubject, cast(markdown as text),dir from StockGuas '
         orderby= '  order by cast( substr(guaDate,6,2) as integer), guaDate  '
         if searchmode==1:  #按照卦名搜索
             self.txtTitle.setText("")
@@ -88,44 +90,58 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         connection.close()
 
     def displayGua(self):
-        self.comboImg.clear()
+        #self.comboImg.clear()
         self.label_pic.clear()
         items=self.tableGua.selectedItems()
         postTitle=items[0].text()
         guaContent=items[5].text()
         guaName=items[3].text()
-        imgPath=items[7].text()
+        guaSubject=items[7].text()
         dir=items[9].text()
         if not postTitle in guaContent:
             guaContent="主帖标题: "+postTitle+"\n"+guaContent
         rawStock=items[2].text()
         gDate=items[1].text()
+        # self.txtContent.setPlainText(guaContent)
         self.txtContent.setPlainText(guaContent)
+        #self.mdstatus=1
+        self.radioButton_html.setChecked(False)
+
         stockCode,stockName=akPlot.extractStockName(rawStock)
         if stockCode=="NULL" or stockName=="NULL":
             stockCode,stockName=akPlot.extractStockName(postTitle)
         subject=akPlot.getSubject(guaContent)
-        re1=r'images.+jpg|images.+.jpeg|images.+png'
-        images=re.findall(re1,guaContent)
-        self.dir=dir
-        if images:
-            img=images[0]
-            self.comboImg.addItems(images)
-            dir_default="c:/youdaoMD/BBS/"
-            imgfull=dir_default+img
-            if not os.path.exists(imgfull):
-                imgfull=dir+img
-            pixmap=QPixmap(imgfull)
-            self.label_pic.setPixmap(pixmap)
+        #re1=r'images.+jpg|images.+.jpeg|images.+png'
+        #images=re.findall(re1,guaContent)
+        #self.dir=dir
         self.txtStockCode.setText(stockCode)
         self.txtStockName.setText(stockName)
         self.txtGuaDate.setText(gDate)
         self.txtGuaName.setText(guaName)
         self.txtSubject.setText(subject)
+        self.radioButton_30d.setChecked(True)
         #self.refreshImg()
 
+    def htmlformat(self):
+       # if  self.mdstatus==1 :
+        if self.radioButton_html.isChecked():
+            cont=self.txtContent.toPlainText()
+            cont=cont.replace("\n","\n\n")
+            html_content = markdown.markdown(cont, extensions=['extra'])
+            #html_content=html_content.replace("\n","<br>")
+           # print("html: ", html_content)
+            self.txtContent.setHtml(html_content)
+            #self.mdstatus=0
+        else:
+            html_content=self.txtContent.toHtml()
+            #print(html_content)
+            md_content=html2text.html2text(html_content)
+            #print(md_content)
+            self.txtContent.setPlainText(md_content)
+            #self.mdstatus=1
+
     def drawpicDaily(self,days):
-        self.drawType="D"
+        self.drawType=f'{days}d'
         guaDate=self.txtGuaDate.text()
         stockCode=self.txtStockCode.text()
         dateOrigin=guaDate
@@ -138,7 +154,7 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             QMessageBox.information(None, "警告", "股票名字或代号出错，是否退市？") 
 
     def drawpicMonth(self):
-        self.drawType="M"
+        self.drawType="Y"
         guaDate=self.txtGuaDate.text()
         stockCode=self.txtStockCode.text()
         dateOrigin=guaDate
@@ -148,6 +164,30 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_pic.setPixmap(pixmap) 
         if imgfile=="alert.jpg":
             QMessageBox.information(None, "警告", "股票名字或代号出错，是否退市？")  
+    
+    def drawPicture(self):
+        print(" button draw is checked!")
+        if self.radioButton_365d.isChecked():
+            self.drawpicMonth()
+        else:
+            if self.radioButton_15d.isChecked():
+                days=15  
+            if self.radioButton_30d.isChecked():
+                days=30
+            if self.radioButton_60d.isChecked():
+                days=60
+            if self.radioButton_90d.isChecked():
+                days=90
+            self.drawpicDaily(days)
+        
+    def saveAction(self):
+        if self.insert_mode == True:
+            self.insertNewRecord()
+            self.refreshText()
+            self.btn_save.setText("更新正文")
+            self.insert_mode=False
+        else:
+            self.saveContentChange()
 
     def saveContentChange(self):
         QMessageBox.information(None, "注意", "当前界面的:卦内容-卦名-股票名-K线图片文件名，均被更新存入数据库")
@@ -157,11 +197,9 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         new_guaName=self.txtGuaName.text()
         new_content = self.txtContent.toPlainText()
         new_guaDate=self.txtGuaDate.text()
-        #mdlink=self.txtImg.text()
-        mdlink=self.comboImg.currentText()
         connection = sqlite3.connect('Guas.db')
         cursor = connection.cursor()
-        query='UPDATE StockGuas  SET guaDate="{}", stockName = "{}", guaName="{}", guaContent ="{}",  imgPath="{}" WHERE rowid = {}  '.format( new_guaDate, new_stockCode, new_guaName, new_content, mdlink, rowid)
+        query='UPDATE StockGuas  SET guaDate="{}", stockName = "{}", guaName="{}", guaContent ="{}"  WHERE rowid = {}  '.format( new_guaDate, new_stockCode, new_guaName, new_content, rowid)
         cursor.execute(query)
         connection.commit()
         cursor.close()
@@ -169,6 +207,24 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print("saving Change is OK")
         self.loadInfo(self.mode)
         self.tableGua.setCurrentCell(row, 1) 
+
+    def insertNewRecord(self):
+        #row = self.tableGua.currentRow()
+        #rowid = self.tableGua.item(row, 6).text()
+        new_stockCode=self.txtStockCode.text()
+        new_guaName=self.txtGuaName.text()
+        new_content = self.txtContent.toPlainText()
+        new_guaDate=self.txtGuaDate.text()
+        conn = sqlite3.connect('Guas.db')
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO stockGuas (guaDate,stockName,guaName,guaContent ) VALUES (?, ?, ?, ?,?) ", 
+                         (new_guaDate, new_stockCode, new_guaName, new_content))
+        conn.commit()
+        #cursor.close()
+        conn.close()
+        self.btn_save.setDisabled(False)
+        print("insert new record is OK!")
+
 
     def washContent(self):
         cont=self.txtContent.toPlainText()
@@ -222,7 +278,8 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         new_guaName=self.txtGuaName.text()
         new_content = self.txtContent.toPlainText()
         new_date=self.txtGuaDate.text()
-        mddir = "/youdaoMD/BBS/"
+       # mddir = "/youdaoMD/BBS/"
+        mddir = "../markdown/"
         file_name = f"{new_guaName}_{new_stockCode}_{new_date}_{postid}.md"
         file_name=mddir+file_name
         file_name, _ = diag.getSaveFileName(self, "保存当前记录到markdown文件！", file_name, "markdown Files (*.md);;txt  file(*.txt)", options=options)
@@ -242,7 +299,8 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
     def saveMdFiles(self):
         QMessageBox.information(None, "注意", "搜索结果即将批量写入markdown文件，文件默认目录为c://youdaoMD/BBS/")
-        mddir = "c:/youdaoMD/BBS/"
+       # mddir = "c:/youdaoMD/BBS/"
+        mddir = "../markdown/"
         xsize=self.tableGua.rowCount() 
         ysize=self.tableGua.columnCount()
         #print(xsize,ysize)
@@ -275,7 +333,8 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         diag=QFileDialog()
         options = diag.Options()
         QMessageBox.information(None, "注意", "搜索结果即将全部汇总写入一个markdown文件，文件默认目录为c://youdaoMD/BBS/")
-        mddir = "/youdaoMD/BBS/"
+        #mddir = "/youdaoMD/BBS/"
+        mddir = "../markdown/"
         xsize=self.tableGua.rowCount() 
         ysize=self.tableGua.columnCount()
         guaNameStr=self.txtSearchGuaName.text().strip()
@@ -328,16 +387,6 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         outGuaName,guacont=gua.displayDoubleGuaText()
         self.txtContent.append(guacont)
 
-    def refreshImg(self):  #用现成的图片地址框刷新图片，以备比较网络数据画出的图片
-        img=self.comboImg.currentText()
-        #dir=self.dir
-        dir_default="c:/youdaoMD/BBS/"
-        imgfull=dir_default+img
-        if not os.path.exists(imgfull):
-            imgfull=self.dir+img
-        pixmap=QPixmap(imgfull)
-        self.label_pic.setPixmap(pixmap)
-
     def refreshText(self):
         self.txtGuaName.clear()
         self.txtStockCode.clear()
@@ -346,31 +395,14 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.txtContent.clear()
         self.txtSubject.clear()
         self.label_pic.clear()
-        self.btn_save.setDisabled(True)
+        #self.btn_save.setDisabled(True)
         self.insert_mode=True
-
-    def saveNewRecord(self):
-        #row = self.tableGua.currentRow()
-        #rowid = self.tableGua.item(row, 6).text()
-        new_stockCode=self.txtStockCode.text()
-        new_guaName=self.txtGuaName.text()
-        new_content = self.txtContent.toPlainText()
-        new_guaDate=self.txtGuaDate.text()
-        #mdlink=self.txtImg.text()
-        mdlink=self.comboImg.currentText()
-        conn = sqlite3.connect('Guas.db')
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO stockGuas (guaDate,stockName,guaName,guaContent,imgPath ) VALUES (?, ?, ?, ?,?) ", 
-                         (new_guaDate, new_stockCode, new_guaName, new_content, mdlink))
-        conn.commit()
-        #cursor.close()
-        conn.close()
-        self.btn_save.setDisabled(False)
+        self.btn_save.setText("插入新记录")
 
     def saveJPG(self):
         diag=QFileDialog()
         options = diag.Options()
-        mddir = "/youdaoMD/BBS/images/"
+        mddir = "../images/"
         secNum=self.txtStockCode.text()  
         originDay=self.txtGuaDate.text()
         filename=secNum+"_"+originDay+"_"+self.drawType+".jpg"
@@ -384,11 +416,6 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             print("image file is saved! ")
         mdlink="images/"+os.path.basename(newfile)
         self.txtContent.append( f'![]({mdlink})')
-        #self.txtImg.setText(mdlink)
-        self.comboImg.addItem(mdlink)
-        self.comboImg.setCurrentText(mdlink)
-        #if self.insert_mode==False:
-        #    self.saveContentChange()
         
     '''
     def deleteSamePics(self):
@@ -418,13 +445,15 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def generatePics(self):
         xsize=self.tableGua.rowCount() 
-        mddir = "/youdaoMD/BBS/images/"
+        #mddir = "/youdaoMD/BBS/images/"
+        mddir="../images/"
         #ysize=self.tableGua.columnCount()
         #self.drawType="D"
         for x in range(0,xsize):
             rowid = self.tableGua.item(x, 6).text()
             postTitle=self.tableGua.item(x,0).text()
             rawStock=self.tableGua.item(x,2).text()
+            guaContent=self.tableGua.items[x,5].text()
             stockCode,stockName=akPlot.extractStockName(rawStock)
             if stockCode=="NULL" or stockName=="NULL":
                 stockCode,stockName=akPlot.extractStockName(postTitle)
@@ -435,9 +464,10 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             newfile=mddir+filename
             shutil.copy(src, newfile)
             mdlink="images/"+os.path.basename(newfile)
+            newguaContent=guaContent+f'![]({mdlink})'
             connection = sqlite3.connect('Guas.db')
             cursor = connection.cursor()
-            query='UPDATE StockGuas  SET imgPath="{}" WHERE rowid = {}  '.format(mdlink, rowid)
+            query='UPDATE StockGuas  SET  guaContent ="{}" WHERE rowid = {}  '.format(newguaContent, rowid)
             cursor.execute(query)
             connection.commit()
             cursor.close()
