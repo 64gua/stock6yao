@@ -12,10 +12,13 @@ def writeMdInfoToCSV(dir,csvname):
     #dir should be end with "/"
     full_csv=dir+csvname
     i=0
-    j=0
     for file in os.listdir(dir):
-        if file.endswith(".md") and  not file.startswith("total"):
+        #if file.endswith(".md") and  not file.startswith("total"):
+        if file.endswith(".md") :
             i+=1
+            #if i>5:
+            #    return
+            print(i,file)
             code,name=akPlot.extractStockName(file)
             guaName=akPlot.extractGuaName(file)
             day=akPlot.getDate(file)
@@ -28,22 +31,15 @@ def writeMdInfoToCSV(dir,csvname):
                 day=akPlot.getDate(cont)
             if code=="NULL" and name=="NULL":
                 code,name=akPlot.extractStockName(cont)   #here we can try search subject first
-                if code=="NULL" and name=="NULL":
-                    code="sh000001"
-                    name="上证指数"
-            re1=r'images.+jpg|images.+.jpeg|images.+png'
-            images=re.findall(re1,cont)
-            imgend=""
-            if images:
-                imgend=images[-1]
-            subject=akPlot.getSubject(cont)
-            
+               # if code=="NULL" and name=="NULL":
+                #    code="sh000001"
+                 #   name="上证指数"            
             #CSV 格式
-            infoList=[guaName,code,day,subject,file, imgend]
+            infoList=[guaName,code,day,cont,file]
             with open(full_csv, 'a', newline='',encoding="utf-8" ) as cf:
                 writer=csv.writer(cf)
                 writer.writerow(infoList)
-                print(i, " is  now wriing")
+               # print(i, file, " is  now wriing")
 
 def insertCsvToDatabase(csv_name):
     print("Let us start the new journey!...")
@@ -56,9 +52,10 @@ def insertCsvToDatabase(csv_name):
             gua=row[0]
             code=row[1]
             day=row[2]
-            subject=row[3]
+            cont=row[3]
             file=row[4]
-            img=row[5]
+            #img=row[5]
+            #gua_code_day_cont_file_mini.csv
             dir=CURRENT_DIR
             query = (gua,code,day)
             conn=sqlite3.connect('Guas.db')
@@ -66,12 +63,13 @@ def insertCsvToDatabase(csv_name):
             cursor.execute('SELECT * FROM stockGuas WHERE guaName=? and stockName=? and guaDate=?   ',query)
             db_result=cursor.fetchall()
             if len(db_result)==0:
-                filefull=CURRENT_DIR+file
-                with open(filefull, 'r',encoding="utf-8") as f:
-                    cont=f.read()
-                cont=cont.strip()
-                tuple=(gua,code, day, subject,cont,img,dir)
-                cursor.execute("INSERT INTO stockGuas (guaName,stockname, guaDate,guaSubject,guaContent,imgPath,dir)  VALUES (?, ?, ?,?,?,?,?)", tuple )
+                #filefull=CURRENT_DIR+file
+                #with open(filefull, 'r',encoding="utf-8") as f:
+                #    cont=f.read()
+                #cont=cont.strip()
+                tuple=(gua,code, day,cont,file)
+                csv1="gua_code_day_cont_file.csv" 
+                cursor.execute("INSERT INTO stockGuas (guaName,stockname, guaDate,guaContent,guaSubject)  VALUES (?,?,?,?,?)", tuple )
                 print(i,'csv record inserted Successfully')
             else:
                 print(i, "Record exists!......")
@@ -100,15 +98,16 @@ def prefindNullDateFile(dir):
                 re1=r'images.+jpg|images.+.jpeg|images.+png'
                 images=re.findall(re1,cont)
                 if images:
-                    newname="K_"+file
-                    newname_full=dir+newname
-                    os.rename(file_fullname,newname_full)
+                    #newname="K_"+file
+                    #newname_full=dir+newname
+                    #os.rename(file_fullname,newname_full)
+                    print("markdown images Ok!...")
                 else:
                     newname="KZ_"+file
                     newname_full=dir+newname
                     os.rename(file_fullname,newname_full)
-                i=i+1
-                print(i,newname_full)
+                    i=i+1
+                    print(i,newname_full)
     print(i,"files has been renamed with K_")
 
 def infoBaiduOCR(picfile):  # picfile:图片文件名
@@ -209,13 +208,11 @@ def processNullDateFiles(dir):  #预先处理NULL日期信息的文件，也就�
                                 os.rename(file_full,newfile)
                                 print("tough file to DZ label")
     print("every is OK!")
-
-CURRENT_DIR="C:/youdaoMD/汇总案例/"
-
+CURRENT_DIR="D:/Markdown/A年卦月卦周卦/"
 
 if __name__ == "__main__":
     markdown_dir=CURRENT_DIR
-    csv1="gua_code_day_subject_file_img1.csv"
+    csv1="gua_code_day_cont_file.csv" 
     #prefindNullDateFile(markdown_dir)
     #processNullDateFiles(markdown_dir)
     #writeMdInfoToCSV(markdown_dir,csv1)

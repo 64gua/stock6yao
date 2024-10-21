@@ -167,8 +167,8 @@ def changeName(path):
     i=0
     for filename in os.listdir(path):
         i=i+1
-        if "K_" in filename:
-            newfilename=filename.replace("K_","")
+        if ".note" in filename:
+            newfilename=filename.replace(".note","v2.md")
         #print(newfilename)
             os.rename(filename,newfilename)
             print(i,filename, newfilename)
@@ -319,7 +319,7 @@ def moveJpgDown(dir):
             print(i, "move to images")
     print("finished!")
 
-CURRENT_DIR="C:/youdaoMD/增删卜易MD"
+CURRENT_DIR="D:/Markdown/易经测市"
 
 if __name__ == "__main__":
     #list_file="c:/youdaoPDF/pdf_csv/part5_treated_v1_file_list.csv"

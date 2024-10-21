@@ -1,0 +1,988 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1142</width>
+    <height>778</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>AcadEref</family>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>kline.jpg</normaloff>kline.jpg</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>48</width>
+    <height>48</height>
+   </size>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonFollowStyle</enum>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <widget class="QPushButton" name="btn_search">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 170, 255);
+color: rgb(255, 255, 255);
+</string>
+    </property>
+    <property name="text">
+     <string>卦名搜索</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtSearchGuaName">
+    <property name="geometry">
+     <rect>
+      <x>117</x>
+      <y>20</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableGua">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>57</y>
+      <width>1061</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>1200</width>
+      <height>800</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+    <property name="showGrid">
+     <bool>true</bool>
+    </property>
+    <property name="rowCount">
+     <number>20</number>
+    </property>
+    <property name="columnCount">
+     <number>10</number>
+    </property>
+    <attribute name="horizontalHeaderHighlightSections">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>25</number>
+    </attribute>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <column>
+     <property name="text">
+      <string>帖子标题</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>问卦日期</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>股票名</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>卦名</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>用户</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>卦内容</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>rowid</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>卦主题</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>markdown</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>dir</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTextEdit" name="txtContent">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>320</y>
+      <width>561</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="sizeIncrement">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-width: 2px;
+border-color: black;
+border-style: solid;
+</string>
+    </property>
+    <property name="lineWidth">
+     <number>2</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_pic">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>320</y>
+      <width>491</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="lineWidth">
+     <number>2</number>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>candle.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>159</x>
+      <y>287</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0,170, 255);
+color: rgb(255, 255, 255);
+</string>
+    </property>
+    <property name="text">
+     <string>股票名字</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtStockName">
+    <property name="geometry">
+     <rect>
+      <x>217</x>
+      <y>287</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">	border-width: 1px;
+	border-style: solid;
+	border-color: blue;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>21</x>
+      <y>287</y>
+      <width>54</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 170, 255);
+color: rgb(255, 255, 255);
+</string>
+    </property>
+    <property name="text">
+     <string>股票代码</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtStockCode">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>287</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">	border-width: 1px;
+	border-style: solid;
+	border-color: blue;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>695</x>
+      <y>27</y>
+      <width>21</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>—</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtGuaDate">
+    <property name="geometry">
+     <rect>
+      <x>341</x>
+      <y>287</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">	border-width: 1px;
+	border-style: solid;
+	border-color: blue;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>304</x>
+      <y>287</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+background-color: rgb(0,170, 255);
+color: rgb(255, 255, 255);
+</string>
+    </property>
+    <property name="text">
+     <string>日期</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_search_bytime">
+    <property name="geometry">
+     <rect>
+      <x>531</x>
+      <y>20</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 170, 255);
+color: rgb(255, 255, 255);
+</string>
+    </property>
+    <property name="text">
+     <string>时间段搜索</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtStartDay">
+    <property name="geometry">
+     <rect>
+      <x>633</x>
+      <y>26</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtEndDay">
+    <property name="geometry">
+     <rect>
+      <x>709</x>
+      <y>26</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="btn_save">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>420</y>
+      <width>61</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">text-align:bottom;</string>
+    </property>
+    <property name="text">
+     <string>更新正文</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>save_icon-icons.png</normaloff>save_icon-icons.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>30</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="autoRepeat">
+     <bool>false</bool>
+    </property>
+    <property name="toolButtonStyle">
+     <enum>Qt::ToolButtonTextUnderIcon</enum>
+    </property>
+    <property name="autoRaise">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtGuaName">
+    <property name="geometry">
+     <rect>
+      <x>486</x>
+      <y>287</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">	border-width: 1px;
+	border-style: solid;
+	border-color: blue;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>429</x>
+      <y>287</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 170, 255);
+color: rgb(255, 255, 255);
+</string>
+    </property>
+    <property name="text">
+     <string>修正卦名</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtStockCode_3">
+    <property name="geometry">
+     <rect>
+      <x>1626</x>
+      <y>-170</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>1576</x>
+      <y>-110</y>
+      <width>54</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>股票代码</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_paipan">
+    <property name="geometry">
+     <rect>
+      <x>573</x>
+      <y>280</y>
+      <width>61</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0,170, 255);
+color: rgb(255, 255, 255);
+</string>
+    </property>
+    <property name="text">
+     <string>重新排盘</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_title">
+    <property name="geometry">
+     <rect>
+      <x>265</x>
+      <y>20</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 170, 255);
+color: rgb(255, 255, 255);
+</string>
+    </property>
+    <property name="text">
+     <string>标题搜索</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtTitle">
+    <property name="geometry">
+     <rect>
+      <x>343</x>
+      <y>19</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_save_img">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>460</y>
+      <width>51</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;
+color: black;
+text-align: bottom; </string>
+    </property>
+    <property name="text">
+     <string>存盘</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>savebutton2.png</normaloff>savebutton2.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>0</y>
+      <width>221</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>20</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 85, 0);
+color: rgb(255, 255, 255);
+border-radius: 5px;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>roob.jpg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>641</x>
+      <y>290</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+background-color: rgb(0,170, 255);
+color: rgb(255, 255, 255);
+</string>
+    </property>
+    <property name="text">
+     <string>帖子主题</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtSubject">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>290</y>
+      <width>221</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">	border-width: 1px;
+	border-style: solid;
+	border-color: blue;</string>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="btn_wash">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>360</y>
+      <width>61</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">text-align:bottom;</string>
+    </property>
+    <property name="text">
+     <string>清洗</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>Washing_Machine_icon.png</normaloff>Washing_Machine_icon.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>30</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="autoRepeat">
+     <bool>false</bool>
+    </property>
+    <property name="toolButtonStyle">
+     <enum>Qt::ToolButtonTextUnderIcon</enum>
+    </property>
+    <property name="autoRaise">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_html">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>330</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>宋体</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>显示图片</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_15d">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>320</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>15天</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_30d">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>340</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>30天</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_60d">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>360</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>60天</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_90d">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>380</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>90天</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_365d">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>400</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>全年</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="btn_draw">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>420</y>
+      <width>51</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;
+color: black;
+text-align: bottom; </string>
+    </property>
+    <property name="text">
+     <string>画K线</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>savebutton2.png</normaloff>savebutton2.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1142</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>查询</string>
+    </property>
+    <addaction name="actName"/>
+    <addaction name="actDate"/>
+    <addaction name="action"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>编辑修改</string>
+    </property>
+    <addaction name="act_single"/>
+    <addaction name="actMd"/>
+    <addaction name="actRemove"/>
+    <addaction name="action_markdown"/>
+    <addaction name="act_all_in"/>
+    <addaction name="separator"/>
+    <addaction name="act_new"/>
+    <addaction name="act_save_new"/>
+    <addaction name="actDelete"/>
+    <addaction name="act_del_same_pics"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>生成K线图</string>
+    </property>
+    <addaction name="act_generate_pics"/>
+    <addaction name="action_4"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actName">
+   <property name="text">
+    <string>按卦名搜索</string>
+   </property>
+  </action>
+  <action name="actDate">
+   <property name="text">
+    <string>按时间段搜索</string>
+   </property>
+  </action>
+  <action name="actMd">
+   <property name="text">
+    <string>搜索结果写入各个md文件</string>
+   </property>
+  </action>
+  <action name="actDelete">
+   <property name="text">
+    <string>删除当前废贴</string>
+   </property>
+  </action>
+  <action name="actRemove">
+   <property name="text">
+    <string>期货移至Futures表</string>
+   </property>
+  </action>
+  <action name="act_all_in">
+   <property name="text">
+    <string>写入汇总表格HTML</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>按用户名搜索</string>
+   </property>
+  </action>
+  <action name="act_single">
+   <property name="text">
+    <string>选中单个记录写入markdown</string>
+   </property>
+  </action>
+  <action name="act_generate_pics">
+   <property name="text">
+    <string>批量生产图片</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="act_new">
+   <property name="text">
+    <string>创建新纪录</string>
+   </property>
+  </action>
+  <action name="action_markdown">
+   <property name="text">
+    <string>添加到指定markdown文件</string>
+   </property>
+  </action>
+  <action name="act_del_same_pics">
+   <property name="text">
+    <string>删除冗余图片</string>
+   </property>
+  </action>
+  <action name="act_save_new">
+   <property name="text">
+    <string>插入新纪录</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
+</ui>
