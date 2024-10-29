@@ -14,7 +14,7 @@ def writeMdInfoToCSV(dir,csvname):
     i=0
     for file in os.listdir(dir):
         #if file.endswith(".md") and  not file.startswith("total"):
-        if file.endswith(".md") :
+        if file.endswith(".md") and not  file.startswith("Total"):
             i+=1
             #if i>5:
             #    return
@@ -40,6 +40,45 @@ def writeMdInfoToCSV(dir,csvname):
                 writer=csv.writer(cf)
                 writer.writerow(infoList)
                # print(i, file, " is  now wriing")
+
+def insertCsvtoDatabase_for_totalfile(csv_name):
+    print("Let us start the new journey!...")
+    #csv 格式由上一个函数生成 [guaName,code,day,subject,file, imgend]--old version
+    #infoList=[guaName,code,day,cont,file]--last 1 version,recent one
+    #infoList=[i,guaName,code,date,subject,cont]
+    with open(csv_name, newline='',encoding="utf-8") as f:
+        reader=csv.reader(f)
+        i=0 
+        for row in reader:
+            i=i+1
+            gua=row[1]
+            code=row[2]
+            day=row[3]
+            subject=row[4]
+            cont=row[5]
+            #img=row[5]
+            #gua_code_day_cont_file_mini.csv
+            dir=CURRENT_DIR
+            query = (gua,code,day)
+            conn=sqlite3.connect('Guas.db')
+            cursor=conn.cursor()
+            cursor.execute('SELECT * FROM stockGuas WHERE guaName=? and stockName=? and guaDate=?   ',query)
+            db_result=cursor.fetchall()
+            if len(db_result)==0:
+                #filefull=CURRENT_DIR+file
+                #with open(filefull, 'r',encoding="utf-8") as f:
+                #    cont=f.read()
+                #cont=cont.strip()
+                tuple=(gua,code, day,cont,subject)
+                csv1="gua_code_day_cont_file.csv" 
+                cursor.execute("INSERT INTO stockGuas (guaName,stockname, guaDate,guaContent,guaSubject)  VALUES (?,?,?,?,?)", tuple )
+                print(i,'csv record inserted Successfully')
+            else:
+                print(i, "Record exists!......")
+            conn.commit()
+            conn.close()
+    print("all the csv has been inserted to database! ")
+
 
 def insertCsvToDatabase(csv_name):
     print("Let us start the new journey!...")
@@ -98,10 +137,11 @@ def prefindNullDateFile(dir):
                 re1=r'images.+jpg|images.+.jpeg|images.+png'
                 images=re.findall(re1,cont)
                 if images:
-                    #newname="K_"+file
-                    #newname_full=dir+newname
-                    #os.rename(file_fullname,newname_full)
-                    print("markdown images Ok!...")
+                    newname="K_"+file
+                    newname_full=dir+newname
+                    os.rename(file_fullname,newname_full)
+                    print(i,dir+file)
+                    i=i+1
                 else:
                     newname="KZ_"+file
                     newname_full=dir+newname
@@ -120,7 +160,7 @@ def infoBaiduOCR(picfile):  # picfile:图片文件名
     i = open(picfile, 'rb')
     img = i.read()
     message = client.basicGeneral(img)
-    print(message)
+    #print(message)
     #data = str(client.basicGeneral(image))
     i.close() 
     string=""    
@@ -128,8 +168,10 @@ def infoBaiduOCR(picfile):  # picfile:图片文件名
         str_row=text.get('words')
         string+=str_row
     guaDate=akPlot.getDateOcr(string)
-    subject=akPlot.getSubject(string)
-    return guaDate,subject
+    #subject=akPlot.getSubject(string)
+    #return guaDate,subject
+    return guaDate
+
 
 def allInfoBaiduOCR(picfile):  # picfile:图片文件名
     # 百度提供易经卦象APP
@@ -158,17 +200,19 @@ def allInfoBaiduOCR(picfile):  # picfile:图片文件名
     guaName=akPlot.getGuaName(string)
     code,name=akPlot.extractStockName(string)
     guaDate=akPlot.getDateOcr(string)
-    #guaDate2=akPlot.getDate(string)
+    guaDate2=akPlot.getDate(string)
     subject=akPlot.getSubject(string)
-    #print("old way date:",guaDate2)
+    print("old way date:",guaDate2)
+    
     return guaName, code, guaDate,subject
+    
 
 
 def processNullDateFiles(dir):  #预先处理NULL日期信息的文件，也就是主要是图片，文字极少的md文件
     #os.chdir(dir)
     i=0
     for file in os.listdir(dir):
-        if file.startswith("KZ_"):
+        if file.startswith("K_"):
             print(file,"is processing!")
             file_full=CURRENT_DIR+file
             with open(file_full,"r",encoding="utf-8") as f:
@@ -208,13 +252,102 @@ def processNullDateFiles(dir):  #预先处理NULL日期信息的文件，也就�
                                 os.rename(file_full,newfile)
                                 print("tough file to DZ label")
     print("every is OK!")
-CURRENT_DIR="D:/Markdown/A年卦月卦周卦/"
+
+def processNullDateFiles_easy(dir):  #预先处理NULL日期信息的文件，也就是主要是图片，文字极少的md文件
+    #os.chdir(dir)
+    i=0
+    for file in os.listdir(dir):
+        if file.startswith("K_"):
+            print(file,"is processing!")
+            file_full=CURRENT_DIR+file
+            with open(file_full,"r",encoding="utf-8") as f:
+                cont=f.read()
+            date=akPlot.getDate(cont)
+            #subject=akPlot.getSubject(cont)
+            if date=="NULL":
+                re1=r'images.+jpg|images.+.jpeg|images.+png'
+                images=re.findall(re1,cont)
+                if images:
+                    image=images[0]
+                    image_full=CURRENT_DIR+image
+                    #print(image)
+                    #date,subject=infoBaiduOCR(image)
+                    #guaName, code, date,subject=allInfoBaiduOCR(image_full)
+                    date=infoBaiduOCR(image_full)
+                    #print(guaName,code,date,subject)
+                    if date=="NULL":
+                        newfile=CURRENT_DIR+ file.replace("K_","KZ_")
+                        os.rename(file_full,newfile)
+                        print("tough file to DZ label")
+                        continue
+                    else:
+                        newcont=date+"\n"+cont
+                        with open(file_full,"w",encoding="utf-8") as f:
+                            f.write(newcont)
+                        print(i, "file insert: ", file_full)
+                        newfile=CURRENT_DIR+ file.replace("K_","KO_")
+                        os.rename(file_full,newfile)
+                        i=i+1   
+                        #if i>5:
+                        #    return     
+    print("every is OK!")
+
+
+
+def total_Number_1(dir):
+    allContent=""
+    i=1
+    for file in os.listdir(dir):
+        if file.startswith("Total"):
+            i+=1
+            print(i,file)
+            file_full=CURRENT_DIR+file
+            with open(file_full,"r",encoding="utf-8") as f:
+                cont=f.read()
+            allContent=allContent+cont
+    newfile=CURRENT_DIR+"total_Number_1.md"
+    with open(newfile, "w",encoding="utf-8") as f:
+        f.write(allContent)
+    print("every thing is writted into total-file!!!")
+
+def getInfofromTotalFile(inputfile,csvname):
+    dir=CURRENT_DIR
+    full_csv=dir+csvname
+    inputfile=dir+inputfile
+    with open(inputfile,"r",encoding="utf-8") as f:
+        cont=f.read()
+    re1=r'images.+jpg|images.+.jpeg|images.+png'
+    images=re.findall(re1,cont)
+    i=0
+    for image in images:
+        image_mdlink="![]("+image+")"
+        image_full=CURRENT_DIR+image
+        i=i+1
+        print(i,image_full)
+        guaName, code, date,subject=allInfoBaiduOCR(image_full)
+        print(i,guaName,code,date,subject,image_mdlink)
+        infoList=[i,guaName,code,date,subject,cont]
+        with open(full_csv, 'a', newline='',encoding="utf-8" ) as cf:
+            writer=csv.writer(cf)
+            writer.writerow(infoList)
+
+
+
+
+
+CURRENT_DIR="D:/Markdown/2019己亥年_OK/"
 
 if __name__ == "__main__":
-    markdown_dir=CURRENT_DIR
-    csv1="gua_code_day_cont_file.csv" 
+    dir=CURRENT_DIR
+    #csv1="gua_code_day_cont_file.csv" 
+    csv_name="total_Number_1_infos.csv"
+    full_csv_name=dir+csv_name
+    #total_Number_1(markdown_dir)
+    #getInfofromTotalFile("total_Number_1.md","csv_for_total.csv")
     #prefindNullDateFile(markdown_dir)
-    #processNullDateFiles(markdown_dir)
+    #processNullDateFiles_easy(markdown_dir)
     #writeMdInfoToCSV(markdown_dir,csv1)
-    insertCsvToDatabase(CURRENT_DIR+csv1)
+    #insertCsvToDatabase(CURRENT_DIR+csv1)
+    insertCsvtoDatabase_for_totalfile(full_csv_name)
+    
 

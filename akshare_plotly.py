@@ -178,7 +178,7 @@ def candleline(stock, startday, endday, labelday ,period="daily" ):
 def drawDailyLine(secNum,dateOriginStr,time_period=30):
     #sec = '600166'    originStr='2022-11-10'      becuase the database is this format
     day0=datetime.strptime(dateOriginStr,"%Y-%m-%d").date()
-    day1=day0-timedelta(days=5)
+    day1=day0-timedelta(days=10)
     day2=day0+timedelta(days=time_period)
     start=day1.strftime("%Y%m%d")
     end=day2.strftime("%Y%m%d")
@@ -324,8 +324,9 @@ def getDateOcr(contents):
     day=re.findall(re1,contents)
     state=0
     if len(day)==0:
-        date=getDateFromGanzi(contents)
-        return date
+        #date=getDateFromGanzi(contents)
+        #return date
+        return "NULL"
     else:
         daystr=day[0]
     try:

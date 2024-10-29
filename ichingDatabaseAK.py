@@ -40,10 +40,8 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.act_all_in.triggered.connect(self.allInOneMarkdownHtml)
         self.act_single.triggered.connect(self.singleMarkdown)
         self.act_new.triggered.connect(self.refreshText)
-        #self.act_del_same_pics.triggered.connect(self.deleteSamePics)
         self.act_generate_pics.triggered.connect(self.generatePics)
         self.act_save_new.triggered.connect(self.insertNewRecord)
-        #self.comboImg.currentIndexChanged.connect(self.refreshImg)
         self.btn_wash.clicked.connect(self.washContent)
         self.radioButton_html.toggled.connect(self.htmlformat)
         self.insert_mode=False
@@ -71,7 +69,7 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.txtEndDay.setText("")
             self.txtSearchGuaName.setText("")
             str=self.txtTitle.text().strip()
-            self.modestr=f'where postTitle like "{str}"    ' 
+            self.modestr=f'where guaSubject like "%{str}%"    ' 
         query=mainsql+self.modestr+orderby
         print("query: ",query)
         result=cursor.execute(query)
@@ -110,15 +108,11 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         stockCode,stockName=akPlot.extractStockName(rawStock)
         if stockCode=="NULL" or stockName=="NULL":
             stockCode,stockName=akPlot.extractStockName(postTitle)
-        subject=akPlot.getSubject(guaContent)
-        #re1=r'images.+jpg|images.+.jpeg|images.+png'
-        #images=re.findall(re1,guaContent)
-        #self.dir=dir
         self.txtStockCode.setText(stockCode)
         self.txtStockName.setText(stockName)
         self.txtGuaDate.setText(gDate)
         self.txtGuaName.setText(guaName)
-        self.txtSubject.setText(subject)
+        self.txtSubject.setText(guaSubject)
         self.radioButton_30d.setChecked(True)
         #self.refreshImg()
 
@@ -173,7 +167,7 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.radioButton_15d.isChecked():
                 days=15  
             if self.radioButton_30d.isChecked():
-                days=30
+                days=35
             if self.radioButton_60d.isChecked():
                 days=60
             if self.radioButton_90d.isChecked():
@@ -190,16 +184,17 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.saveContentChange()
 
     def saveContentChange(self):
-        QMessageBox.information(None, "注意", "当前界面的:卦内容-卦名-股票名-K线图片文件名，均被更新存入数据库")
+        QMessageBox.information(None, "注意", "当前界面的:卦内容-卦名-股票名-日期-主题，均被更新存入数据库")
         row = self.tableGua.currentRow()
         rowid = self.tableGua.item(row, 6).text()
         new_stockCode=self.txtStockCode.text()
         new_guaName=self.txtGuaName.text()
         new_content = self.txtContent.toPlainText()
         new_guaDate=self.txtGuaDate.text()
+        new_subject=self.txtSubject.text()
         connection = sqlite3.connect('Guas.db')
         cursor = connection.cursor()
-        query='UPDATE StockGuas  SET guaDate="{}", stockName = "{}", guaName="{}", guaContent ="{}"  WHERE rowid = {}  '.format( new_guaDate, new_stockCode, new_guaName, new_content, rowid)
+        query='UPDATE StockGuas  SET guaDate="{}", stockName = "{}", guaName="{}", guaContent ="{}",guaSubject="{}"  WHERE rowid = {}  '.format( new_guaDate, new_stockCode, new_guaName, new_content, new_subject, rowid)
         cursor.execute(query)
         connection.commit()
         cursor.close()
@@ -215,10 +210,11 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         new_guaName=self.txtGuaName.text()
         new_content = self.txtContent.toPlainText()
         new_guaDate=self.txtGuaDate.text()
+        new_subject=self.txtSubject.text()
         conn = sqlite3.connect('Guas.db')
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO stockGuas (guaDate,stockName,guaName,guaContent ) VALUES (?, ?, ?, ?,?) ", 
-                         (new_guaDate, new_stockCode, new_guaName, new_content))
+        cursor.execute("INSERT INTO stockGuas (guaDate,stockName,guaName,guaContent,guaSubject ) VALUES (?, ?, ?, ?,?) ", 
+                         (new_guaDate, new_stockCode, new_guaName, new_content,new_subject))
         conn.commit()
         #cursor.close()
         conn.close()
@@ -332,9 +328,8 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def allInOneMarkdownHtml(self):
         diag=QFileDialog()
         options = diag.Options()
-        QMessageBox.information(None, "注意", "搜索结果即将全部汇总写入一个markdown文件，文件默认目录为c://youdaoMD/BBS/")
-        #mddir = "/youdaoMD/BBS/"
-        mddir = "../markdown/"
+        QMessageBox.information(None, "注意", "搜索结果即将全部汇总写入HTML文件，文件默认目录为E:/stock6yao")
+        htmldir = "E:/stock6yao/"
         xsize=self.tableGua.rowCount() 
         ysize=self.tableGua.columnCount()
         guaNameStr=self.txtSearchGuaName.text().strip()
@@ -342,33 +337,23 @@ class MyWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         totalContent=""
         for x in range(0,xsize):
             cont=self.tableGua.item(x,5).text()
-            totalContent=totalContent+cont+"\n*****\n"
-            #cont=cont.replace("![](","*******").replace(".jpg)",".jpg")  #"这是从数据库中获取的\n包含换行的文本"
+            totalContent=totalContent+cont+"\n\n"
             # 将文本字段内容转义为 HTML 格式
-            escaped_text = html.escape(cont)
-            html_cont = escaped_text.replace("\n", "<br>")
-            img=self.tableGua.item(x,7).text()
-            imgPath="c:/youdaoMD/BBS/"+img
-            if img=="":
-                imgPath="c:/youdaoMD/roob.jpg"
-            #注意：obsedian文件最大宽为800px
-            imgLink=' <img src="{}" width="350" height="350" > '.format(imgPath)
-            list1=[html_cont, imgLink]
-            list.append(list1)
-        htmlout=create_html_table(list)
-        file_name =mddir+f"{guaNameStr}_汇总_双栏.md"
-        file_name2=mddir+f"{guaNameStr}_汇总_单列.md"
-        file_back = "c:/Users/Robert/Desktop/"+f"{guaNameStr}_汇总.html"
-        file_name, _ = diag.getSaveFileName(self, "保存文件", file_name, "HTML Files (*.html);; markdown file(*.md)", options=options)
-        if file_name:
-            with open(file_name, 'w',encoding="utf-8") as file:
-                file.write(htmlout)
-            with open(file_name2,'w',encoding="utf-8") as f:
-                f.write(totalContent)
-            shutil.copy(file_name, file_back)
+        print("before escape:",totalContent  )
+        escaped_text = html.escape(totalContent)
+        print("escape:",escaped_text)
+        html_cont = escaped_text.replace("\n", "<br>")
+        print("pure html:",html_cont)
+        html_content = re.sub(r'!\[(.*?)\]\((.*?)\)', r'<img src="\2">', html_cont)
+        outhtml = htmldir+f"{guaNameStr}_Total.html"
+        out_file_name, _ = diag.getSaveFileName(self, "保存文件", outhtml, "HTML Files (*.html);", options=options)
+        if out_file_name:
+            with open(out_file_name, 'w',encoding="utf-8") as file:
+                file.write(html_content)
+           # shutil.copy(file_name, file_back)
         print("Total HTML and Markdown is finished!")
-        self.refreshMark()
-        
+        #self.refreshMark()
+            
 
     def paipan(self):
         gua=sixyao.Zhugua()
